@@ -13,21 +13,19 @@ def train(x_data, y_data, k, stp):
     W2 = f.buildMatrix(k, 1)
     b1 = f.buildMatrix(k, 1)
     b2 = f.buildMatrix(1, 1)
+
     Wd1 = f.buildMatrix(1, k)
     Wd2 = f.buildMatrix(k, 1)
     bd1 = f.buildMatrix(k, 1)
     bd2 = f.buildMatrix(1, 1)
 
-    oWd1 = f.buildMatrix(1, k)
-    oWd2 = f.buildMatrix(k, 1)
-    obd1 = f.buildMatrix(k, 1)
-    obd2 = f.buildMatrix(1, 1)
     epoch = 0
     bsum = 0
 
     while 1:
         epoch = epoch + 1
-        print("training epoch: ", epoch)
+        print "training epoch: ", epoch
+        print " "
         Wd1.fill(0)
         Wd2.fill(0)
         bd1.fill(0)
@@ -41,30 +39,25 @@ def train(x_data, y_data, k, stp):
             sum = sum + (yhat - y_data[i])*(yhat - y_data[i])
             acc = acc + abs(yhat - y_data[i])
 
-            W2term1 = f.term1(W1, W2, x_data[i], y_data[i], b1, b2)
-            W2term2 = f.term2(W1, W2, x_data[i], b1, b2)
-            W2term3 = W1.transpose()*(x_data[i]) + b1
+            Wd2 = Wd2 + f.calcWd2(W1, W2, x_data[i], y_data[i], b1, b2)
 
-            Wd2 = Wd2 + (W2term1 * W2term2 * W2term3)
+            Wd1 = Wd1 + f.calcWd1(W1, W2, x_data[i], y_data[i], b1, b2)
 
-            W1term1 = W2term1 * W2term2
-            W1term2 = W2.transpose()
-            W1term3 = f.W1term3(W1, x_data[i], b1)
+            bd2 = bd2 + f.calcbd2(W1, W2, x_data[i], y_data[i], b1, b2)
 
-            Wd1 = Wd1 + (W1term1 * np.dot(np.asarray(W1term2), np.asarray(W1term3)))
-
-            bd2 = bd2 + W2term1 * W2term2
-            b1term3 = f.b1term3(W1, x_data[i], b1)
-            bd1 = bd1 + (W1term1 * W1term2 * b1term3.transpose()).transpose()
+            bd1 = bd1 + f.calcbd1(W1,W2, x_data[i], y_data[i], b1, b2)
 
         sum = sum/(2*n)
         acc = acc/n
-        print("Loss: ", sum)
-        print("Accuracy %", 100 * (1-sum))
-        print("Avg difference: ", acc)
-        print("Loss diff: ", abs(bsum - sum))
-        if abs(sum - bsum) < 0.0009 and epoch > 15:
+        print "Loss: ", sum[0]
+        print "Accuracy %", (100 * (1-sum))[0]
+        print "Avg difference: ", acc[0]
+        print "Loss diff: ", (abs(bsum - sum))[0]
+        print " "
+
+        if abs(sum - bsum) < 0.0005 and epoch > 15:
             break
+
         bsum = sum
         Wd1  = Wd1/n
         Wd2 = Wd2/n

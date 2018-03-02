@@ -48,6 +48,36 @@ def term2(W1, W2, x, b1, b2):
 
     return finterm
 
+def calcWd2(W1, W2, x, y, b1, b2):
+    W2term1 = term1(W1, W2, x, y, b1, b2)
+    W2term2 = term2(W1, W2, x, b1, b2)
+    W2term3 = W1.transpose() * (x) + b1
+    finterm = W2term1 * W2term2 * W2term3
+    return finterm
+
+def calcbd2(W1, W2, x, y, b1, b2):
+    W2term1 = term1(W1, W2, x, y, b1, b2)
+    W2term2 = term2(W1, W2, x, b1, b2)
+    return W2term1 * W2term2
+
+def calcWd1(W1, W2, x, y, b1, b2):
+    Wterm1 = term1(W1, W2, x, y, b1, b2)
+    Wterm2 = term2(W1, W2, x, b1, b2)
+    w1term1 = Wterm1 * Wterm2
+    w1term2 = W2.transpose()
+    wterm3 = W1term3(W1, x, b1)
+    finterm = w1term1 * np.dot(np.asarray(w1term2), np.asarray(wterm3))
+    return finterm
+
+def calcbd1(W1, W2, x, y, b1, b2):
+    Wterm1 = term1(W1, W2, x, y, b1, b2)
+    Wterm2 = term2(W1, W2, x, b1, b2)
+    w1term1 = Wterm1 * Wterm2
+    w1term2 = W2.transpose()
+    bterm3 = b1term3(W1, x, b1)
+    finterm = (w1term1 * w1term2 * bterm3.transpose()).transpose()
+    return finterm
+
 def W1term3(W, x, b):
 
     W = np.asarray(W)
