@@ -35,9 +35,11 @@ def train(x_data, y_data, k, stp):
         n = len(x_data)
 
         sum = 0
+        acc = 0
         for i in range(n):
             yhat = f.getyhat(W1, W2, b1, b2, x_data[i])
             sum = sum + (yhat - y_data[i])*(yhat - y_data[i])
+            acc = acc + abs(yhat - y_data[i])
 
             W2term1 = f.term1(W1, W2, x_data[i], y_data[i], b1, b2)
             W2term2 = f.term2(W1, W2, x_data[i], b1, b2)
@@ -56,10 +58,12 @@ def train(x_data, y_data, k, stp):
             bd1 = bd1 + (W1term1 * W1term2 * b1term3.transpose()).transpose()
 
         sum = sum/(2*n)
+        acc = acc/n
         print("Loss: ", sum)
         print("Accuracy %", 100 * (1-sum))
+        print("Avg difference: ", acc)
         print("Loss diff: ", abs(bsum - sum))
-        if abs(sum - bsum) < 0.0009 and epoch > 10:
+        if abs(sum - bsum) < 0.0009 and epoch > 15:
             break
         bsum = sum
         Wd1  = Wd1/n
