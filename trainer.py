@@ -5,6 +5,7 @@ import time
 import sys
 from scipy.io import loadmat
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 import function_lib as f
 
@@ -55,7 +56,7 @@ def train(x_data, y_data, k, stp):
         print "Loss diff: ", (abs(bsum - sum))[0]
         print " "
 
-        if abs(sum - bsum) < 0.0005 and epoch > 15:
+        if abs(sum - bsum) < 0.0002 and epoch > 20:
             break
 
         bsum = sum
@@ -96,6 +97,10 @@ if __name__ == '__main__':
 
     plt.scatter(x, yhats, color="r")
     plt.scatter(x, y, color="b")
+    plt.xlabel('X Values')
+    plt.legend(('Network Outputs, k=' + k, 'Y Values'),
+               loc='upper right')
+    plt.title('Trainer Performance')
     plt.show()
 
 
